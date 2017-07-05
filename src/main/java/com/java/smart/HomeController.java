@@ -30,6 +30,11 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
+	@RequestMapping(value = "/")
+	public String main(Locale locale, Model model) {
+		return "myEditor";
+	}
+	
 	@RequestMapping(value = "/myEditor")
 	public String myEditor(Locale locale, Model model) {
 		return "myEditor";
