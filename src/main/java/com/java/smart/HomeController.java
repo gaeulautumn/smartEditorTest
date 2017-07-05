@@ -30,32 +30,6 @@ public class HomeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
-		
-		return "home";
-	}
-	@RequestMapping(value = "/SmartEditor2Skin")
-	public String SmartEditor2Skin(Locale locale, Model model) {
-		return "SmartEditor2Skin";
-	}
-	
-	@RequestMapping(value = "/SmartEditor2")
-	public String SmartEditor2(Locale locale, Model model) {
-		return "SmartEditor2";
-	}
-	
 	@RequestMapping(value = "/myEditor")
 	public String myEditor(Locale locale, Model model) {
 		return "myEditor";
@@ -63,24 +37,18 @@ public class HomeController {
 	
 	@RequestMapping(value = "/sendText", method = RequestMethod.POST)
 	public String sendText(Locale locale, Model model, @RequestParam("editor") String se) {
-		
+		//console에 출력
 		System.out.println(se);
 		return "myEditor";
 	}
 
-
-	@RequestMapping(value = "/photoUploader")
-	public String photoUploader(Locale locale, Model model) {
-		return "photo_uploader";
-	}
-	
 	@RequestMapping(value = "/file_uploader_html5", method=RequestMethod.POST)
-	public String fileUploaderHtml5(HttpServletRequest request, HttpServletResponse response) {
+	public void fileUploaderHtml5(HttpServletRequest request, HttpServletResponse response) {
 		StringBuffer sb = new StringBuffer();
 		try {
 			System.out.println("file upload controller");
 			System.out.println(request.getSession().getServletContext().getRealPath("/"));
-	         String sFileInfo = "";
+	        String sFileInfo = "";
 
 			// 파일명을 받는다 - 일반 원본파일명
 			String oldName = request.getHeader("file-name");
@@ -107,7 +75,7 @@ public class HomeController {
 	         sFileInfo += "&bNewLine=true";
 	         // img 태그의 title 속성을 원본파일명으로 적용시켜주기 위함
 	         sFileInfo += "&sFileName="+ oldName;
-	         sFileInfo += "&sFileURL="+"/smartEditorTest/resources/upload/"+ saveName;
+	         sFileInfo += "&sFileURL="+"/smart/resources/upload/"+ saveName;
 
 	         System.out.println("sfileInfo ::: " + sFileInfo);
 	         PrintWriter print = response.getWriter();
@@ -117,8 +85,6 @@ public class HomeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return sb.toString();
-	
 
 	}
 }

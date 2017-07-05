@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>에디터</title>
+<title>스마트에디터</title>
 
 <script src="https://code.jquery.com/jquery-latest.js"></script>
 <script type="text/javascript" src="./resources/editor/js/HuskyEZCreator.js" charset="utf-8"></script>
@@ -11,7 +11,7 @@
 </head>
 <script type="text/javascript">
 	$(function(){
-	    //전역변수
+	    //전역변수, 배열
 	    var obj = [];              
 	    //스마트에디터 프레임생성
 	    nhn.husky.EZCreator.createInIFrame({
@@ -27,9 +27,9 @@
 	            bUseModeChanger : true,
 	        }
 	    });
-	    //전송버튼
+	    //전송버튼 누르면
 	    $("#insertBoard").click(function(){
-	        //id가 smarteditor인 textarea에 에디터에서 대입
+	        //에디터에서 id가 editor인 textarea에 대입
 	        obj.getById["editor"].exec("UPDATE_CONTENTS_FIELD", []);
 	        //폼 submit
 	        $("#insertBoardFrm").submit();
@@ -39,6 +39,7 @@
 </script>
 <body>
 
+	<!-- 서버로 텍스트 전송 -->
 	<form action="sendText" method="post" id="insertBoardFrm" enctype="multipart/form-data">
 		<textarea name="editor" id="editor" style="width: 700px; height: 400px;"></textarea>
 		<input type="button" id="insertBoard" value="등록" />
