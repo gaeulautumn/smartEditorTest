@@ -29,9 +29,9 @@
 	    });
 	    //전송버튼 누르면
 	    $("#insertBoard").click(function(){
-	        //에디터에서 id가 editor인 textarea에 대입
+	        //에디터의 내용을 id가 editor인 textarea에 대입
 	        obj.getById["editor"].exec("UPDATE_CONTENTS_FIELD", []);
-	        //폼 submit
+	        //폼 submit				
 	        $("#insertBoardFrm").submit();
 	    });
 	});
