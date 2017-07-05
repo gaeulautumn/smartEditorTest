@@ -35,6 +35,7 @@
 	        $("#insertBoardFrm").submit();
 	    });
 	});
+
 </script>
 <body>
 

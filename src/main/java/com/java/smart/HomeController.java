@@ -1,8 +1,10 @@
 package com.java.smart;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -76,10 +78,18 @@ public class HomeController {
 	public String fileUploaderHtml5(HttpServletRequest request, HttpServletResponse response) {
 		StringBuffer sb = new StringBuffer();
 		try {
+			System.out.println("file upload controller");
+			System.out.println(request.getSession().getServletContext().getRealPath("/"));
+	         String sFileInfo = "";
+
 			// 파일명을 받는다 - 일반 원본파일명
 			String oldName = request.getHeader("file-name");
 			// 파일 기본경로 _ 상세경로
-			String filePath = "C:/Users/가을/workspace/smartEditorTest/src/main/webapp/resources/upload/";
+			
+			String dftFilePath = request.getSession().getServletContext().getRealPath("/");
+			String filePath = dftFilePath + "resources" + File.separator + "upload" + File.separator;
+					
+				//	"C:/Users/daou/workspace/smartEditorTest/src/main/webapp/resources/upload/";
 			String saveName = sb.append(new SimpleDateFormat("yyyyMMddHHmmss")
                           .format(System.currentTimeMillis()))
                           .append(UUID.randomUUID().toString())
@@ -93,12 +103,17 @@ public class HomeController {
 			}
 			os.flush();
 			os.close();
-			// 정보 출력
-			sb = new StringBuffer();
-			sb.append("&bNewLine=true")
-			  .append("&sFileName=").append(oldName)
-			  .append("&sFileURL=").append("http://localhost:8181/seTest/resources/upload/")
-        .append(saveName);
+
+	         sFileInfo += "&bNewLine=true";
+	         // img 태그의 title 속성을 원본파일명으로 적용시켜주기 위함
+	         sFileInfo += "&sFileName="+ oldName;
+	         sFileInfo += "&sFileURL="+"/smartEditorTest/resources/upload/"+ saveName;
+
+	         System.out.println("sfileInfo ::: " + sFileInfo);
+	         PrintWriter print = response.getWriter();
+	         print.print(sFileInfo);
+	         print.flush();
+	         print.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
