@@ -1,13 +1,12 @@
-package com.java.smart;
+package com.smart.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -22,14 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/**
- * Handles requests for the application home page.
- */
 @Controller
-public class HomeController {
+public class EditorController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	
+	private static final Logger logger = LoggerFactory.getLogger(EditorController.class);
+
 	@RequestMapping(value = "/")
 	public String main(Locale locale, Model model) {
 		return "myEditor";
@@ -43,30 +39,27 @@ public class HomeController {
 	@RequestMapping(value = "/sendText", method = RequestMethod.POST)
 	public String sendText(Locale locale, Model model, @RequestParam("editor") String se) {
 		//console에 출력
-		System.out.println(se);
+		logger.info(se);
 		return "myEditor";
 	}
 
 	@RequestMapping(value = "/file_uploader_html5", method=RequestMethod.POST)
 	public void fileUploaderHtml5(HttpServletRequest request, HttpServletResponse response) {
-		StringBuffer sb = new StringBuffer();
-		try {
-			System.out.println("file upload controller");
-			System.out.println(request.getSession().getServletContext().getRealPath("/"));
+		try {		
 	        String sFileInfo = "";
+	        String date = new SimpleDateFormat("yyyyMMddHHmmss").format(System.currentTimeMillis());
 
-			// 파일명을 받는다 - 일반 원본파일명
+			// 원본 파일명
 			String oldName = request.getHeader("file-name");
-			// 파일 기본경로 _ 상세경로
-			
+			// 파일 기본경로 / 상세경로
 			String dftFilePath = request.getSession().getServletContext().getRealPath("/");
 			String filePath = dftFilePath + "resources" + File.separator + "upload" + File.separator;
-					
-				//	"C:/Users/daou/workspace/smartEditorTest/src/main/webapp/resources/upload/";
-			String saveName = sb.append(new SimpleDateFormat("yyyyMMddHHmmss")
-                          .format(System.currentTimeMillis()))
-                          .append(UUID.randomUUID().toString())
-                          .append(oldName.substring(oldName.lastIndexOf("."))).toString();
+			//C:/Users/daou/workspace/smartEditorTest/src/main/webapp/resources/upload/
+
+			//저장용 파일명
+			String saveName = date + UUID.randomUUID().toString() 
+							  + oldName.substring(oldName.lastIndexOf(".")).toString();
+			
 			InputStream is = request.getInputStream();
 			OutputStream os = new FileOutputStream(filePath + saveName);
 			int numRead;
@@ -80,15 +73,15 @@ public class HomeController {
 	         sFileInfo += "&bNewLine=true";
 	         // img 태그의 title 속성을 원본파일명으로 적용시켜주기 위해
 	         sFileInfo += "&sFileName="+ oldName;
-	         sFileInfo += "&sFileURL="+"/smart/resources/upload/"+ saveName;
+	         sFileInfo += "&sFileURL=/smart/resources/upload/"+ saveName;
 
-	         System.out.println("sfileInfo ::: " + sFileInfo);
 	         PrintWriter print = response.getWriter();
 	         print.print(sFileInfo);
 	         print.flush();
 	         print.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+
+		} catch (IOException e) {
+			logger.error("IOException");
 		}
 
 	}
